@@ -1,0 +1,62 @@
+<div class="admin-shell">
+  @if (toastMessage) {
+  <div class="admin-toast">{{ toastMessage }}</div>
+  }
+
+  <app-admin-sidebar [tabs]="tabs" [activeTab]="activeTab" (tabChange)="switchTab($event)" (logout)="logout.emit()">
+  </app-admin-sidebar>
+
+  <div class="admin-main">
+    <app-admin-header [title]="pageTitle"></app-admin-header>
+
+    <section class="admin-credentials">
+      <h3>Admin Login Credentials</h3>
+      <p><strong>Email:</strong> {{ adminCredentials.email }}</p>
+      <p><strong>Password:</strong> {{ adminCredentials.password }}</p>
+    </section>
+
+    <section class="content">
+      @if (activeTab === 'dashboard') {
+      <app-admin-dashboard-tab [analytics]="analytics"></app-admin-dashboard-tab>
+      }
+
+      @if (activeTab === 'products') {
+      <app-admin-products-tab
+        [products]="products"
+        (addProduct)="openProductModal()"
+        (deleteProduct)="deleteProduct($event)"
+      ></app-admin-products-tab>
+      }
+
+      @if (activeTab === 'orders') {
+      <app-admin-orders-tab [orders]="orders" (viewOrder)="openOrderModal($event)"></app-admin-orders-tab>
+      }
+
+      @if (activeTab === 'users') {
+      <app-admin-users-tab [users]="users"></app-admin-users-tab>
+      }
+
+      @if (activeTab === 'feedback') {
+      <app-admin-feedback-tab [feedback]="feedbackList"></app-admin-feedback-tab>
+      }
+
+      @if (activeTab === 'analytics') {
+      <app-admin-analytics-tab [analytics]="analytics"></app-admin-analytics-tab>
+      }
+    </section>
+  </div>
+
+  <app-admin-product-modal
+    [visible]="showProductModal"
+    (close)="closeProductModal()"
+    (submitProduct)="handleProductSubmit($event)"
+  ></app-admin-product-modal>
+
+  <app-admin-order-modal
+    [visible]="showOrderModal"
+    [selectedStatus]="selectedOrderStatus"
+    (selectedStatusChange)="selectedOrderStatus = $event"
+    (close)="closeOrderModal()"
+    (updateStatus)="handleOrderUpdate()"
+  ></app-admin-order-modal>
+</div>

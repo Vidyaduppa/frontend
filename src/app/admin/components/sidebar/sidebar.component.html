@@ -1,0 +1,43 @@
+<aside class="sidebar">
+  <div class="sidebar-head">
+    <div class="logo-wrap">
+      <div class="logo-badge">GN</div>
+      <span>Golden Nectar</span>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    @for (tab of tabs; track tab.key) {
+    <button
+      type="button"
+      class="sidebar-item"
+      [class.active]="activeTab === tab.key"
+      (click)="tabChange.emit(tab.key)"
+    >
+      @if (tab.key === 'dashboard') {
+      <span>&#128202;</span>
+      }
+      @if (tab.key === 'products') {
+      <span>&#127855;</span>
+      }
+      @if (tab.key === 'orders') {
+      <span>&#128230;</span>
+      }
+      @if (tab.key === 'users') {
+      <span>&#128101;</span>
+      }
+      @if (tab.key === 'feedback') {
+      <span>&#11088;</span>
+      }
+      @if (tab.key === 'analytics') {
+      <span>&#128200;</span>
+      }
+      <span>{{ tab.label }}</span>
+    </button>
+    }
+  </nav>
+
+  <div class="sidebar-foot">
+    <button type="button" class="logout-btn" (click)="logout.emit()">Logout</button>
+  </div>
+</aside>

@@ -1,0 +1,21 @@
+<h2>Your Cart</h2>
+@if (!cart.length) {
+<p class="empty">Your cart is empty.</p>
+}
+@for (item of cart; track item.productId) {
+<article class="line-item">
+  <span>{{ productById(item.productId)?.name }}</span>
+  <div class="qty">
+    <button type="button" (click)="quantityChange.emit({ productId: item.productId, change: -1 })">-</button>
+    <span>{{ item.quantity }}</span>
+    <button type="button" (click)="quantityChange.emit({ productId: item.productId, change: 1 })">+</button>
+  </div>
+  <button type="button" (click)="removeItem.emit(item.productId)">Remove</button>
+</article>
+}
+@if (cart.length) {
+<div class="summary">
+  <div><span>Subtotal</span><strong>${{ subtotal.toFixed(2) }}</strong></div>
+  <button type="button" class="cta" (click)="proceedCheckout.emit()">Proceed to Checkout</button>
+</div>
+}

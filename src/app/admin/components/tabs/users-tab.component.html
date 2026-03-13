@@ -1,0 +1,28 @@
+<div class="section-head">
+  <h2>User Management</h2>
+</div>
+@if (!users.length) {
+<p class="empty">No users found.</p>
+}
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Status</th>
+      <th>Orders</th>
+      <th>Join Date</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (user of users; track user.id) {
+    <tr>
+      <td>{{ user.name }}</td>
+      <td>{{ user.email }}</td>
+      <td><span class="badge" [class.warn]="user.status !== 'active'">{{ user.status }}</span></td>
+      <td>{{ user.orders }}</td>
+      <td>{{ user.joinedAt }}</td>
+    </tr>
+    }
+  </tbody>
+</table>

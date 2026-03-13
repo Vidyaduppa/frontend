@@ -1,0 +1,64 @@
+:host {
+  display: block;
+}
+
+h2 {
+  margin: 0 0 10px;
+  font-family: 'Playfair Display', serif;
+}
+
+select,
+textarea,
+input {
+  border: 1px solid #f3ca7e;
+  border-radius: 10px;
+  padding: 9px 10px;
+  background: #fffdf6;
+  font: inherit;
+}
+
+button {
+  border: 1px solid #f3ca7e;
+  border-radius: 10px;
+  background: #fff;
+  color: #78350f;
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
+.stars {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.stars button.active {
+  background: #f59e0b;
+  color: #fff;
+}
+
+.check {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 0;
+}
+
+.cta {
+  background: #f59e0b;
+  border-color: #f59e0b;
+  color: #fff;
+  font-weight: 700;
+}
+
+.line-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #fde68a;
+  border-radius: 10px;
+  padding: 10px;
+  margin-top: 8px;
+  gap: 8px;
+  background: #fffbef;
+}

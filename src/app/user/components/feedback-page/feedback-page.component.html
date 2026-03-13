@@ -1,0 +1,33 @@
+<h2>Share Your Feedback</h2>
+<div class="stars">
+  @for (n of stars; track n) {
+  <button type="button" [class.active]="n <= form.rating" (click)="setRating(n)">*</button>
+  }
+</div>
+<select [(ngModel)]="form.category">
+  <option value="">Select category...</option>
+  <option value="product-quality">Product Quality</option>
+  <option value="shipping">Shipping and Delivery</option>
+  <option value="customer-service">Customer Service</option>
+  <option value="website">Website and Experience</option>
+</select>
+<textarea rows="4" maxlength="500" placeholder="Tell us what you think..." [(ngModel)]="form.text"></textarea>
+<label class="check">
+  <input type="checkbox" [(ngModel)]="form.contact" />
+  I'd like a response
+</label>
+@if (form.contact) {
+<input type="email" placeholder="your@email.com" [(ngModel)]="form.email" />
+}
+<button type="button" class="cta" (click)="onSubmit()">Send Feedback</button>
+
+@for (item of feedbackList; track $index) {
+<article class="line-item">
+  <div>
+    <strong>{{ item.category }}</strong>
+    <small>{{ item.date | date: 'MMM d' }}</small>
+  </div>
+  <span>{{ item.rating }}/5</span>
+  <p>{{ item.text }}</p>
+</article>
+}

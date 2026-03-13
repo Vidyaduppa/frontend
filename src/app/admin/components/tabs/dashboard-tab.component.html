@@ -1,0 +1,22 @@
+<div class="stats">
+  <article class="card">
+    <p>Total Orders</p>
+    <h3>{{ analytics?.totalOrders ?? 0 }}</h3>
+    <small>From backend</small>
+  </article>
+  <article class="card">
+    <p>Total Revenue</p>
+    <h3>${{ analytics?.totalRevenue ?? 0 }}</h3>
+    <small>From backend</small>
+  </article>
+  <article class="card">
+    <p>Active Users</p>
+    <h3>{{ analytics?.activeUsers ?? 0 }}</h3>
+    <small>From backend</small>
+  </article>
+  <article class="card">
+    <p>Avg Rating</p>
+    <h3>{{ analytics?.averageRating ?? 0 }}</h3>
+    <small>From backend</small>
+  </article>
+</div>

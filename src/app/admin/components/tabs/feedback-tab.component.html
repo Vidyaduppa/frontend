@@ -1,0 +1,12 @@
+@if (!feedback.length) {
+<p class="empty">No feedback yet.</p>
+}
+<div class="stack">
+  @for (item of feedback; track $index) {
+  <article class="card">
+    <h4>{{ item.category }}</h4>
+    <p>{{ item.text }}</p>
+    <small>{{ item.rating }}/5 • {{ item.date | date: 'MMM d, y' }}</small>
+  </article>
+  }
+</div>

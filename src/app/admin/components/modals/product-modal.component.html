@@ -1,0 +1,21 @@
+@if (visible) {
+<div class="modal-overlay" (click)="close.emit()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h2>Add New Product</h2>
+    <form class="stack" (ngSubmit)="submit()">
+      <input type="text" [(ngModel)]="form.name" name="name" placeholder="Product Name" required />
+      <select [(ngModel)]="form.category" name="category">
+        <option>Premium</option>
+        <option>Medicinal</option>
+        <option>Raw/Organic</option>
+      </select>
+      <input type="number" [(ngModel)]="form.price" name="price" placeholder="Price" required />
+      <input type="number" [(ngModel)]="form.stock" name="stock" placeholder="Stock" required />
+      <div class="modal-actions">
+        <button type="submit" class="primary-btn">Add Product</button>
+        <button type="button" (click)="close.emit()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+}

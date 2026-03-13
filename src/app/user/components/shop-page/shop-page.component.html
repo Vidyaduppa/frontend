@@ -1,0 +1,60 @@
+<div class="hero">
+  <h1>Nature's Sweetest Gift</h1>
+  <p>Discover our collection of premium, raw, and organic honey.</p>
+</div>
+
+<div class="filters">
+  <input
+    type="text"
+    placeholder="Search honey varieties..."
+    [ngModel]="query.searchTerm"
+    (ngModelChange)="update('searchTerm', $event)"
+  />
+  <select [ngModel]="query.category" (ngModelChange)="update('category', $event)">
+    <option value="all">All Types</option>
+    <option value="raw">Raw Honey</option>
+    <option value="organic">Organic</option>
+    <option value="infused">Infused</option>
+    <option value="specialty">Specialty</option>
+  </select>
+  <select [ngModel]="query.price" (ngModelChange)="update('price', $event)">
+    <option value="all">Any Price</option>
+    <option value="under15">Under $15</option>
+    <option value="15to25">$15 - $25</option>
+    <option value="over25">Over $25</option>
+  </select>
+  <select [ngModel]="query.sortBy" (ngModelChange)="update('sortBy', $event)">
+    <option value="featured">Featured</option>
+    <option value="price-low">Price: Low to High</option>
+    <option value="price-high">Price: High to Low</option>
+    <option value="name">Name A-Z</option>
+    <option value="rating">Top Rated</option>
+  </select>
+</div>
+
+@if (products.length) {
+<div class="products">
+  @for (product of products; track product.id) {
+  <article class="card">
+    <div class="image">{{ product.category[0] | uppercase }}</div>
+    <div class="body">
+      @if (product.featured) {
+      <span class="badge">Featured</span>
+      }
+      <h3>{{ product.name }}</h3>
+      <p>{{ product.description }}</p>
+      <div class="meta">
+        <small>{{ product.category }}</small>
+        <small>{{ product.rating }}</small>
+      </div>
+      <div class="row">
+        <strong>${{ product.price.toFixed(2) }}</strong>
+        <button type="button" (click)="addToCart.emit(product.id)">Add</button>
+      </div>
+    </div>
+  </article>
+  }
+</div>
+} @else {
+  <p class="empty">No honey found. Try adjusting your filters.</p>
+}

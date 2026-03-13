@@ -1,0 +1,30 @@
+<div class="section-head">
+  <h2>Order Management</h2>
+</div>
+@if (!orders.length) {
+<p class="empty">No orders found.</p>
+}
+<table>
+  <thead>
+    <tr>
+      <th>Order ID</th>
+      <th>Customer</th>
+      <th>Amount</th>
+      <th>Status</th>
+      <th>Date</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (order of orders; track order.id) {
+    <tr>
+      <td>{{ order.id }}</td>
+      <td>{{ order.items.length }} items</td>
+      <td>${{ order.total.toFixed(2) }}</td>
+      <td><span class="badge">{{ order.status }}</span></td>
+      <td>{{ order.date | date: 'MMM d, y' }}</td>
+      <td><button type="button" class="small-btn" (click)="viewOrder.emit(order.id)">View</button></td>
+    </tr>
+    }
+  </tbody>
+</table>

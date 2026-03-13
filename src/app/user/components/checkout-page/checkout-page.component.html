@@ -1,0 +1,24 @@
+<h2>Checkout</h2>
+<div class="form">
+  <input type="text" placeholder="Full Name" [(ngModel)]="form.name" />
+  <input type="email" placeholder="Email" [(ngModel)]="form.email" />
+  <textarea rows="2" placeholder="Address" [(ngModel)]="form.address"></textarea>
+  <select [(ngModel)]="form.paymentMethod">
+    <option value="card">Credit / Debit Card</option>
+    <option value="paypal">PayPal</option>
+    <option value="apple">Apple Pay</option>
+  </select>
+  @if (form.paymentMethod === 'card') {
+  <div class="form">
+    <input type="text" placeholder="Card Number" [(ngModel)]="form.cardNumber" (input)="formatCardNumber()" />
+    <input type="text" placeholder="MM/YY" [(ngModel)]="form.cardExpiry" (input)="formatExpiry()" />
+    <input type="text" placeholder="CVC" [(ngModel)]="form.cardCvc" />
+  </div>
+  }
+</div>
+<div class="summary">
+  <div><span>Subtotal</span><strong>${{ subtotal.toFixed(2) }}</strong></div>
+  <div><span>Tax</span><strong>${{ tax.toFixed(2) }}</strong></div>
+  <div><span>Total</span><strong>${{ total.toFixed(2) }}</strong></div>
+</div>
+<button type="button" class="cta" (click)="placeOrder.emit(form)">Place Order</button>

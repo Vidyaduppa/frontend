@@ -1,0 +1,17 @@
+@if (visible) {
+<div class="modal-overlay" (click)="close.emit()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h2>Order Details</h2>
+    <select [ngModel]="selectedStatus" (ngModelChange)="selectedStatusChange.emit($event)">
+      <option>Processing</option>
+      <option>In Transit</option>
+      <option>Delivered</option>
+      <option>Cancelled</option>
+    </select>
+    <div class="modal-actions">
+      <button type="button" class="primary-btn" (click)="updateStatus.emit()">Update Status</button>
+      <button type="button" (click)="close.emit()">Close</button>
+    </div>
+  </div>
+</div>
+}

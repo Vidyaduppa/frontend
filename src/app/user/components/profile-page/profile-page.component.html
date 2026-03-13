@@ -1,0 +1,7 @@
+<h2>My Account</h2>
+<div class="form">
+  <input type="text" placeholder="Full Name" [(ngModel)]="form.name" />
+  <input type="email" placeholder="Email" [(ngModel)]="form.email" />
+  <textarea rows="3" placeholder="Shipping Address" [(ngModel)]="form.address"></textarea>
+</div>
+<button type="button" class="cta" (click)="saveProfile.emit(form)">Save Changes</button>

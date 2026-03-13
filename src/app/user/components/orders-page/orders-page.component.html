@@ -1,0 +1,14 @@
+<h2>Your Orders</h2>
+@if (!orders.length) {
+<p class="empty">No orders yet.</p>
+}
+@for (order of orders; track order.id) {
+<article class="line-item">
+  <div>
+    <strong>{{ order.id }}</strong>
+    <small>{{ order.date | date: 'MMM d, y' }}</small>
+  </div>
+  <span>{{ order.status }}</span>
+  <strong>${{ order.total.toFixed(2) }}</strong>
+</article>
+}

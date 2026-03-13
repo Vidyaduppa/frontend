@@ -1,0 +1,301 @@
+app-admin-dashboard {
+  display: block;
+  min-height: 100vh;
+}
+
+.admin-shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  font-family: 'Poppins', sans-serif;
+  color: #1e293b;
+  background: #f1f5f9;
+}
+
+.admin-shell .sidebar {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+  color: #fff;
+}
+
+.admin-shell .sidebar-head,
+.admin-shell .sidebar-foot {
+  padding: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.admin-shell .sidebar-foot {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 0;
+}
+
+.admin-shell .logo-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 700;
+}
+
+.admin-shell .logo-badge {
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 0.55rem;
+  display: grid;
+  place-items: center;
+  background: #f59e0b;
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.admin-shell .sidebar-nav {
+  padding: 1rem 0;
+}
+
+.admin-shell .sidebar-item {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.75rem 1.5rem;
+  cursor: pointer;
+}
+
+.admin-shell .sidebar-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.admin-shell .sidebar-item.active {
+  background: rgba(245, 158, 11, 0.12);
+  border-left: 3px solid #f59e0b;
+}
+
+.admin-shell .logout-btn {
+  border: 0;
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+  padding: 0;
+}
+
+.admin-shell .admin-main {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  min-width: 0;
+}
+
+.admin-shell .admin-header {
+  background: #fff;
+  padding: 1.5rem;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.admin-shell .admin-header h1 {
+  margin: 0;
+  font-size: 1.75rem;
+}
+
+.admin-shell .admin-header p {
+  margin: 0.5rem 0 0;
+  color: #64748b;
+}
+
+.admin-shell .header-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.admin-shell .header-actions button,
+.admin-shell .admin-btn {
+  border: 0;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.9rem;
+  cursor: pointer;
+}
+
+.admin-shell .admin-btn {
+  background: #f59e0b;
+  color: #fff;
+}
+
+.admin-shell .content {
+  padding: 1.5rem;
+}
+
+.admin-shell .admin-credentials {
+  margin: 1.5rem 1.5rem 0;
+  padding: 1rem 1.25rem;
+  border-radius: 0.75rem;
+  border: 1px solid #fde68a;
+  background: #fffbeb;
+  color: #78350f;
+}
+
+.admin-shell .admin-credentials h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+}
+
+.admin-shell .admin-credentials p {
+  margin: 0.25rem 0;
+}
+
+.admin-shell .stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.admin-shell .card {
+  background: #fff;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.admin-shell .card p,
+.admin-shell .card h4 {
+  margin: 0;
+}
+
+.admin-shell .card h3 {
+  margin: 0.5rem 0;
+}
+
+.admin-shell .card small {
+  color: #10b981;
+}
+
+.admin-shell .section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.admin-shell .section-head h2 {
+  margin: 0;
+}
+
+.admin-shell table {
+  width: 100%;
+  background: #fff;
+  border-radius: 0.75rem;
+  border-collapse: collapse;
+  overflow: hidden;
+}
+
+.admin-shell th,
+.admin-shell td {
+  padding: 0.9rem;
+  text-align: left;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.admin-shell thead {
+  background: #f1f5f9;
+}
+
+.admin-shell .badge {
+  display: inline-block;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  background: #dcfce7;
+  color: #166534;
+  font-size: 0.8rem;
+}
+
+.admin-shell .badge.warn {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.admin-shell button {
+  border: 1px solid #d8dee8;
+  border-radius: 0.5rem;
+  background: #fff;
+  color: #1e293b;
+  padding: 0.5rem 0.8rem;
+  cursor: pointer;
+}
+
+.admin-shell .small-btn {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.6rem;
+  margin-right: 0.4rem;
+}
+
+.admin-shell .small-btn.danger {
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+.admin-shell .primary-btn {
+  background: #f59e0b;
+  border-color: #f59e0b;
+  color: #fff;
+}
+
+.admin-shell .stack {
+  display: grid;
+  gap: 1rem;
+}
+
+.admin-shell .modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: grid;
+  place-items: center;
+  z-index: 40;
+}
+
+.admin-shell .modal-content {
+  width: min(560px, calc(100% - 24px));
+  background: #fff;
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.admin-shell input,
+.admin-shell select {
+  width: 100%;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  padding: 0.6rem 0.75rem;
+}
+
+.admin-shell .modal-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.admin-shell .admin-toast {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 100;
+  background: #dcfce7;
+  color: #166534;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+}
+
+@media (max-width: 900px) {
+  .admin-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-shell .sidebar {
+    grid-template-rows: auto auto auto;
+  }
+}
