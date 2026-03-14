@@ -1,6 +1,7 @@
 export type Page = 'shop' | 'cart' | 'checkout' | 'confirmation' | 'orders' | 'profile' | 'feedback';
 
 export interface Product {
+imageUrl: any;
   id: string;
   name: string;
   price: number;
@@ -8,6 +9,7 @@ export interface Product {
   rating: number;
   description: string;
   featured: boolean;
+  imageUrl?: string;
 }
 
 export interface CartItem {

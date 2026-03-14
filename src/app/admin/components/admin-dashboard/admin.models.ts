@@ -19,4 +19,5 @@ export interface NewAdminProduct {
   category: string;
   price: number;
   stock: number;
+  imageUrl?: string;
 }

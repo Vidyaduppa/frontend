@@ -36,7 +36,13 @@
 <div class="products">
   @for (product of products; track product.id) {
   <article class="card">
-    <div class="image">{{ product.category[0] | uppercase }}</div>
+    <div class="image">
+      @if (product.imageUrl) {
+      <img class="product-image" [src]="product.imageUrl" [alt]="product.name" loading="lazy" />
+      } @else {
+      {{ product.category[0] | uppercase }}
+      }
+    </div>
     <div class="body">
       @if (product.featured) {
       <span class="badge">Featured</span>

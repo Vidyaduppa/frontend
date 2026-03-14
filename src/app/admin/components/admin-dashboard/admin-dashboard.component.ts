@@ -104,7 +104,8 @@ export class AdminDashboardComponent implements OnInit {
         category: mappedCategory,
         description: 'Created from admin panel',
         price: newProduct.price,
-        featured: false
+        featured: false,
+        imageUrl: newProduct.imageUrl
       })
       .pipe(catchError(() => of(null)))
       .subscribe((createdProduct) => {

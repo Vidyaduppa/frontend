@@ -17,8 +17,24 @@ export class ProductModalComponent {
     name: '',
     category: 'Premium',
     price: '',
-    stock: ''
+    stock: '',
+    imageUrl: ''
   };
+
+  onImageFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement | null;
+    const file = input?.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = typeof reader.result === 'string' ? reader.result : '';
+      this.form.imageUrl = result;
+    };
+    reader.readAsDataURL(file);
+  }
 
   submit(): void {
     if (!this.form.name || !this.form.price || !this.form.stock) return;
@@ -26,8 +42,9 @@ export class ProductModalComponent {
       name: this.form.name,
       category: this.form.category,
       price: Number(this.form.price),
-      stock: Number(this.form.stock)
+      stock: Number(this.form.stock),
+      imageUrl: this.form.imageUrl?.trim() || undefined
     });
-    this.form = { name: '', category: 'Premium', price: '', stock: '' };
+    this.form = { name: '', category: 'Premium', price: '', stock: '', imageUrl: '' };
   }
 }

@@ -52,6 +52,7 @@ export interface CreateProductRequest {
   category: Product['category'];
   description: string;
   featured?: boolean;
+  imageUrl?: string;
 }
 
 export interface UpdateProductRequest extends Partial<CreateProductRequest> {}
