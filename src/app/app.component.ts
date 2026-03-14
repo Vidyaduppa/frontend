@@ -9,13 +9,15 @@ import { ConfirmationPageComponent } from './user/components/confirmation-page/c
 import { OrdersPageComponent } from './user/components/orders-page/orders-page.component';
 import { ProfilePageComponent, ProfileValue } from './user/components/profile-page/profile-page.component';
 import { FeedbackFormValue, FeedbackPageComponent } from './user/components/feedback-page/feedback-page.component';
-import { ApiService } from './services/api.service';
+import { ApiService, AuthLoginResponse, AuthResponse } from './services/api.service';
+import { AuthService } from './services/auth.service';
 import { StoreService } from './services/store.service';
 import { CartItem, FeedbackItem, Order, Page, Product, ProductQuery } from './services/store.models';
 import { catchError, of } from 'rxjs';
 
 type AuthRole = 'guest' | 'user' | 'admin';
-type AuthMode = 'login' | 'register';
+type AuthMode = 'login' | 'register' | 'admin-otp';
+type AdminOtpStep = 'request' | 'verify';
 
 @Component({
   selector: 'app-root',
@@ -41,6 +43,16 @@ export class AppComponent {
 
   loginForm = { email: '', password: '' };
   registerForm = { name: '', email: '', password: '', confirmPassword: '' };
+
+  adminOtp = {
+    email: '',
+    otp: '',
+    step: 'request' as AdminOtpStep,
+    info: '',
+    error: '',
+    cooldownSeconds: 0,
+    attemptsUsed: 0
+  };
   authError = '';
 
   page: Page = 'shop';
@@ -64,7 +76,8 @@ export class AppComponent {
 
   constructor(
     private storeService: StoreService,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private authService: AuthService
   ) {
     this.storeService.products$.subscribe((items) => (this.products = items));
     this.storeService.cart$.subscribe((items) => (this.cart = items));
@@ -72,6 +85,15 @@ export class AppComponent {
     this.storeService.feedback$.subscribe((items) => (this.feedbackList = items));
     this.storeService.profile$.subscribe((profile) => (this.profile = profile));
     this.storeService.loadProducts(this.query);
+
+    // Restore cached auth so refresh doesn't force a relogin.
+    this.authService.restore();
+    const restored = this.authService.user;
+    if (restored) {
+      this.authRole = restored.role;
+      this.storeService.loadOrders();
+      this.storeService.loadFeedback();
+    }
   }
 
   get cartCount(): number {
@@ -100,6 +122,8 @@ export class AppComponent {
   switchAuthMode(mode: AuthMode): void {
     this.authMode = mode;
     this.authError = '';
+    this.adminOtp.error = '';
+    this.adminOtp.info = '';
   }
 
   register(): void {
@@ -148,9 +172,105 @@ export class AppComponent {
           this.authError = 'Invalid email or password.';
           return;
         }
+
+        // Concept: if credentials match and role is admin, require OTP as step 2.
+        // Only set auth after OTP verify returns AuthResponse.
+        const role = response.user?.role;
+        if (role === 'admin') {
+          this.authError = '';
+          this.loginForm.password = '';
+          this.authMode = 'admin-otp';
+          this.adminOtp.email = email;
+          this.adminOtp.step = 'request';
+          this.adminOtp.otp = '';
+          this.adminOtp.attemptsUsed = 0;
+          this.requestAdminOtp();
+          return;
+        }
+
+        // Non-admin: login works like normal if tokens are present.
+        if (this.isAuthResponse(response)) {
+          this.authService.setAuth(response);
+          this.authRole = response.user.role;
+          this.authError = '';
+          this.loginForm = { email: '', password: '' };
+          this.page = 'shop';
+          this.storeService.loadOrders();
+          this.storeService.loadFeedback();
+          return;
+        }
+
+        // If backend ever returns an unexpected shape, fail safely.
+        this.authError = 'Login failed. Please try again.';
+      });
+  }
+
+  requestAdminOtp(): void {
+    const email = this.adminOtp.email.trim().toLowerCase();
+    if (!email) {
+      this.adminOtp.error = 'Please enter your admin email.';
+      return;
+    }
+    if (this.adminOtp.cooldownSeconds > 0) return;
+
+    this.adminOtp.error = '';
+    this.adminOtp.info = '';
+
+    this.apiService
+      .requestAdminOtp(email)
+      .pipe(catchError(() => of(null)))
+      .subscribe((response) => {
+        // Always show generic confirmation; do not infer eligibility.
+        if (!response) {
+          this.adminOtp.error = 'Could not request OTP. Please try again.';
+          return;
+        }
+        this.adminOtp.info = 'If eligible, OTP sent.';
+        this.adminOtp.step = 'verify';
+        this.adminOtp.otp = '';
+        this.adminOtp.attemptsUsed = 0;
+        this.startOtpCooldown(60);
+      });
+  }
+
+  verifyAdminOtp(): void {
+    const email = this.adminOtp.email.trim().toLowerCase();
+    const otp = this.adminOtp.otp.trim();
+
+    if (!email || !otp) {
+      this.adminOtp.error = 'Enter email and the 6-digit OTP.';
+      return;
+    }
+    if (!/^\d{6}$/.test(otp)) {
+      this.adminOtp.error = 'OTP must be 6 digits.';
+      return;
+    }
+    if (this.adminOtp.attemptsUsed >= 5) {
+      this.adminOtp.error = 'Max attempts reached. Please request a new OTP.';
+      return;
+    }
+
+    this.adminOtp.error = '';
+    this.adminOtp.info = '';
+
+    this.apiService
+      .verifyAdminOtp({ email, otp })
+      .pipe(catchError(() => of(null)))
+      .subscribe((response) => {
+        if (!response) {
+          this.adminOtp.attemptsUsed += 1;
+          const remaining = Math.max(0, 5 - this.adminOtp.attemptsUsed);
+          this.adminOtp.error = remaining
+            ? `Invalid or expired code. Attempts left: ${remaining}.`
+            : 'Invalid or expired code. Max attempts reached. Please request a new OTP.';
+          return;
+        }
+
+        this.authService.setAuth(response);
         this.authRole = response.user.role;
         this.authError = '';
-        this.loginForm = { email: '', password: '' };
+        this.adminOtp.info = '';
+        this.adminOtp.error = '';
         this.page = 'shop';
         this.storeService.loadOrders();
         this.storeService.loadFeedback();
@@ -162,6 +282,7 @@ export class AppComponent {
       .logout()
       .pipe(catchError(() => of(void 0)))
       .subscribe(() => {
+        this.authService.clear();
         this.authRole = 'guest';
         this.authMode = 'login';
         this.authError = '';
@@ -263,5 +384,19 @@ export class AppComponent {
     setTimeout(() => {
       if (this.toast === message) this.toast = '';
     }, 2500);
+  }
+
+  private startOtpCooldown(seconds: number): void {
+    this.adminOtp.cooldownSeconds = seconds;
+    const tick = () => {
+      if (this.adminOtp.cooldownSeconds <= 0) return;
+      this.adminOtp.cooldownSeconds -= 1;
+      if (this.adminOtp.cooldownSeconds > 0) setTimeout(tick, 1000);
+    };
+    setTimeout(tick, 1000);
+  }
+
+  private isAuthResponse(response: AuthLoginResponse): response is AuthResponse {
+    return typeof (response as AuthResponse).accessToken === 'string' && !!(response as AuthResponse).user;
   }
 }

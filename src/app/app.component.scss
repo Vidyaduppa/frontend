@@ -65,6 +65,12 @@
   font-weight: 600;
 }
 
+.auth-info {
+  margin-top: 10px;
+  color: #92400e;
+  font-weight: 600;
+}
+
 .app-shell {
   min-height: 100vh;
   display: grid;
@@ -327,6 +333,12 @@ main {
   border-color: #f59e0b;
   color: #fff;
   font-weight: 700;
+}
+
+.cta.secondary {
+  background: #fff;
+  color: #78350f;
+  border-color: #f3ca7e;
 }
 
 .stars {

@@ -18,6 +18,49 @@
     </form>
     }
 
+    @if (authMode === 'admin-otp') {
+    <form class="auth-form" (ngSubmit)="adminOtp.step === 'request' ? requestAdminOtp() : verifyAdminOtp()">
+      <input type="email" name="adminOtpEmail" [(ngModel)]="adminOtp.email" placeholder="Admin Email" required />
+
+      @if (adminOtp.step === 'verify') {
+      <input
+        type="text"
+        name="adminOtpCode"
+        [(ngModel)]="adminOtp.otp"
+        placeholder="6-digit OTP"
+        inputmode="numeric"
+        maxlength="6"
+        required
+      />
+      }
+
+      @if (adminOtp.step === 'request') {
+      <button type="submit" class="cta" [disabled]="adminOtp.cooldownSeconds > 0">
+        @if (adminOtp.cooldownSeconds > 0) { Request OTP ({{ adminOtp.cooldownSeconds }}s) } @else { Request OTP }
+      </button>
+      }
+
+      @if (adminOtp.step === 'verify') {
+      <button type="submit" class="cta">Verify OTP</button>
+      <button
+        type="button"
+        class="cta secondary"
+        (click)="requestAdminOtp()"
+        [disabled]="adminOtp.cooldownSeconds > 0"
+      >
+        @if (adminOtp.cooldownSeconds > 0) { Resend ({{ adminOtp.cooldownSeconds }}s) } @else { Resend OTP }
+      </button>
+      }
+    </form>
+
+    @if (adminOtp.info) {
+    <p class="auth-info">{{ adminOtp.info }}</p>
+    }
+    @if (adminOtp.error) {
+    <p class="auth-error">{{ adminOtp.error }}</p>
+    }
+    }
+
     @if (authMode === 'register') {
     <form class="auth-form" (ngSubmit)="register()">
       <input type="text" name="registerName" [(ngModel)]="registerForm.name" placeholder="Full Name" required />

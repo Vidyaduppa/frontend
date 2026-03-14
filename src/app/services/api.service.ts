@@ -33,6 +33,19 @@ export interface AuthResponse {
   };
 }
 
+// Some backends require OTP for admins and will not issue tokens until OTP verification.
+// Keep this flexible so the frontend can handle either flow.
+export type AuthLoginResponse =
+  | AuthResponse
+  | {
+      otpRequired: true;
+      user: AuthResponse['user'];
+    };
+
+export interface AdminOtpRequestResponse {
+  ok: true;
+}
+
 export interface CreateProductRequest {
   name: string;
   price: number;
@@ -90,6 +103,8 @@ private readonly apiBase = 'http://localhost:3000/api';
     feedback: `${this.apiBase}/feedback`,
     users: `${this.apiBase}/users`,
     analytics: `${this.apiBase}/admin/analytics`,
+    adminOtpRequest: `${this.apiBase}/admin/otp/request`,
+    adminOtpVerify: `${this.apiBase}/admin/otp/verify`,
     userProfile: `${this.apiBase}/user/profile`
   } as const;
 
@@ -103,8 +118,20 @@ private readonly apiBase = 'http://localhost:3000/api';
 
   // POST /api/auth/login
   // Public endpoint to login with email/password and receive tokens + role.
-  login(payload: AuthLoginRequest): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(this.endpoints.auth.login, payload);
+  login(payload: AuthLoginRequest): Observable<AuthLoginResponse> {
+    return this.http.post<AuthLoginResponse>(this.endpoints.auth.login, payload);
+  }
+
+  // POST /api/admin/otp/request
+  // Admin OTP endpoint: always returns { ok: true } to avoid revealing account existence.
+  requestAdminOtp(email: string): Observable<AdminOtpRequestResponse> {
+    return this.http.post<AdminOtpRequestResponse>(this.endpoints.adminOtpRequest, { email });
+  }
+
+  // POST /api/admin/otp/verify
+  // Admin OTP endpoint: returns AuthResponse on success.
+  verifyAdminOtp(payload: { email: string; otp: string }): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(this.endpoints.adminOtpVerify, payload);
   }
 
   // POST /api/auth/logout
