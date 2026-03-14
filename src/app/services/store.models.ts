@@ -1,7 +1,6 @@
 export type Page = 'shop' | 'cart' | 'checkout' | 'confirmation' | 'orders' | 'profile' | 'feedback';
 
 export interface Product {
-imageUrl: any;
   id: string;
   name: string;
   price: number;
