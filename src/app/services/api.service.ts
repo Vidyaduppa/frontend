@@ -53,6 +53,7 @@ export interface CreateProductRequest {
   description: string;
   featured?: boolean;
   imageUrl?: string;
+  stock?: number;
 }
 
 export interface UpdateProductRequest extends Partial<CreateProductRequest> {}
@@ -75,6 +76,7 @@ export interface AdminUserSummary {
   id: string;
   name: string;
   email: string;
+  role?: 'user' | 'admin';
   status: 'active' | 'blocked';
   orders: number;
   joinedAt: string;

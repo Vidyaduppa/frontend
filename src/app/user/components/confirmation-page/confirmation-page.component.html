@@ -1,3 +1,6 @@
 <h2>Order Confirmed!</h2>
-<p>{{ lastOrderId }}</p>
-<button type="button" (click)="viewOrders.emit()">View Orders</button>
+<p class="sub">{{ lastOrderId }}</p>
+<div class="actions">
+  <button type="button" class="cta" (click)="viewOrders.emit()">View Orders</button>
+  <button type="button" class="ghost" (click)="continueShopping.emit()">Continue Shopping</button>
+</div>

@@ -10,5 +10,6 @@ import { AdminProduct } from '../admin-dashboard/admin.models';
 export class ProductsTabComponent {
   @Input({ required: true }) products: AdminProduct[] = [];
   @Output() addProduct = new EventEmitter<void>();
+  @Output() editProduct = new EventEmitter<AdminProduct>();
   @Output() deleteProduct = new EventEmitter<string>();
 }

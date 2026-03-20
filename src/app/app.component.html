@@ -1,93 +1,102 @@
 @if (!isAuthenticated) {
-<section class="auth-screen">
-  <div class="auth-card">
-    <h1>Golden Harvest</h1>
-    <p>Register or login to continue</p>
-    <small class="admin-hint">Use backend credentials for admin and user access.</small>
+<app-landing-page (loginCta)="openAuth('login')" (registerCta)="openAuth('register')">
+  <section landing-auth class="auth-screen">
+    <div class="auth-card">
+      <h1>Magadha Honey</h1>
+      <p>Register or login to continue</p>
 
-    <div class="auth-switch">
-      <button type="button" [class.active]="authMode === 'login'" (click)="switchAuthMode('login')">Login</button>
-      <button type="button" [class.active]="authMode === 'register'" (click)="switchAuthMode('register')">Register</button>
+      <div class="auth-switch">
+        <button type="button" [class.active]="authMode === 'login'" (click)="switchAuthMode('login')">Login</button>
+        <button type="button" [class.active]="authMode === 'register'" (click)="switchAuthMode('register')">
+          Register
+        </button>
+      </div>
+
+      @if (authMode === 'login') {
+      <form class="auth-form" (ngSubmit)="login()">
+        <input type="email" name="loginEmail" [(ngModel)]="loginForm.email" placeholder="Email" required />
+        <input
+          type="password"
+          name="loginPassword"
+          [(ngModel)]="loginForm.password"
+          placeholder="Password"
+          required
+        />
+        <button type="submit" class="cta">Login</button>
+      </form>
+      }
+
+      @if (authMode === 'admin-otp') {
+      <form class="auth-form" (ngSubmit)="adminOtp.step === 'request' ? requestAdminOtp() : verifyAdminOtp()">
+        <input type="email" name="adminOtpEmail" [(ngModel)]="adminOtp.email" placeholder="Admin Email" required />
+
+        @if (adminOtp.step === 'verify') {
+        <input
+          type="text"
+          name="adminOtpCode"
+          [(ngModel)]="adminOtp.otp"
+          placeholder="6-digit OTP"
+          inputmode="numeric"
+          maxlength="6"
+          required
+        />
+        }
+
+        @if (adminOtp.step === 'request') {
+        <button type="submit" class="cta" [disabled]="adminOtp.cooldownSeconds > 0">
+          @if (adminOtp.cooldownSeconds > 0) { Request OTP ({{ adminOtp.cooldownSeconds }}s) } @else { Request OTP }
+        </button>
+        }
+
+        @if (adminOtp.step === 'verify') {
+        <button type="submit" class="cta">Verify OTP</button>
+        <button
+          type="button"
+          class="cta secondary"
+          (click)="requestAdminOtp()"
+          [disabled]="adminOtp.cooldownSeconds > 0"
+        >
+          @if (adminOtp.cooldownSeconds > 0) { Resend ({{ adminOtp.cooldownSeconds }}s) } @else { Resend OTP }
+        </button>
+        }
+      </form>
+
+      @if (adminOtp.info) {
+      <p class="auth-info">{{ adminOtp.info }}</p>
+      }
+      @if (adminOtp.error) {
+      <p class="auth-error">{{ adminOtp.error }}</p>
+      }
+      }
+
+      @if (authMode === 'register') {
+      <form class="auth-form" (ngSubmit)="register()">
+        <input type="text" name="registerName" [(ngModel)]="registerForm.name" placeholder="Full Name" required />
+        <input type="email" name="registerEmail" [(ngModel)]="registerForm.email" placeholder="Email" required />
+        <input
+          type="password"
+          name="registerPassword"
+          [(ngModel)]="registerForm.password"
+          placeholder="Password"
+          required
+        />
+        <input
+          type="password"
+          name="registerConfirmPassword"
+          [(ngModel)]="registerForm.confirmPassword"
+          placeholder="Confirm Password"
+          required
+        />
+        <button type="submit" class="cta">Register</button>
+      </form>
+      }
+
+      @if (authError) {
+      <p class="auth-error">{{ authError }}</p>
+      }
     </div>
-
-    @if (authMode === 'login') {
-    <form class="auth-form" (ngSubmit)="login()">
-      <input type="email" name="loginEmail" [(ngModel)]="loginForm.email" placeholder="Email" required />
-      <input type="password" name="loginPassword" [(ngModel)]="loginForm.password" placeholder="Password" required />
-      <button type="submit" class="cta">Login</button>
-    </form>
-    }
-
-    @if (authMode === 'admin-otp') {
-    <form class="auth-form" (ngSubmit)="adminOtp.step === 'request' ? requestAdminOtp() : verifyAdminOtp()">
-      <input type="email" name="adminOtpEmail" [(ngModel)]="adminOtp.email" placeholder="Admin Email" required />
-
-      @if (adminOtp.step === 'verify') {
-      <input
-        type="text"
-        name="adminOtpCode"
-        [(ngModel)]="adminOtp.otp"
-        placeholder="6-digit OTP"
-        inputmode="numeric"
-        maxlength="6"
-        required
-      />
-      }
-
-      @if (adminOtp.step === 'request') {
-      <button type="submit" class="cta" [disabled]="adminOtp.cooldownSeconds > 0">
-        @if (adminOtp.cooldownSeconds > 0) { Request OTP ({{ adminOtp.cooldownSeconds }}s) } @else { Request OTP }
-      </button>
-      }
-
-      @if (adminOtp.step === 'verify') {
-      <button type="submit" class="cta">Verify OTP</button>
-      <button
-        type="button"
-        class="cta secondary"
-        (click)="requestAdminOtp()"
-        [disabled]="adminOtp.cooldownSeconds > 0"
-      >
-        @if (adminOtp.cooldownSeconds > 0) { Resend ({{ adminOtp.cooldownSeconds }}s) } @else { Resend OTP }
-      </button>
-      }
-    </form>
-
-    @if (adminOtp.info) {
-    <p class="auth-info">{{ adminOtp.info }}</p>
-    }
-    @if (adminOtp.error) {
-    <p class="auth-error">{{ adminOtp.error }}</p>
-    }
-    }
-
-    @if (authMode === 'register') {
-    <form class="auth-form" (ngSubmit)="register()">
-      <input type="text" name="registerName" [(ngModel)]="registerForm.name" placeholder="Full Name" required />
-      <input type="email" name="registerEmail" [(ngModel)]="registerForm.email" placeholder="Email" required />
-      <input
-        type="password"
-        name="registerPassword"
-        [(ngModel)]="registerForm.password"
-        placeholder="Password"
-        required
-      />
-      <input
-        type="password"
-        name="registerConfirmPassword"
-        [(ngModel)]="registerForm.confirmPassword"
-        placeholder="Confirm Password"
-        required
-      />
-      <button type="submit" class="cta">Register</button>
-    </form>
-    }
-
-    @if (authError) {
-    <p class="auth-error">{{ authError }}</p>
-    }
-  </div>
-</section>
+  </section>
+</app-landing-page>
 }
 
 @if (isAuthenticated && authRole === 'admin') {
@@ -104,7 +113,7 @@
     <button class="brand" type="button" (click)="navigateTo('shop')">
       <span class="icon">H</span>
       <span>
-        <strong>Golden Harvest</strong>
+        <strong>Magadha Honey</strong>
         <small>Pure and Natural Honey</small>
       </span>
     </button>
@@ -157,6 +166,10 @@
         [subtotal]="subtotal"
         [tax]="tax"
         [total]="total"
+        [cart]="cart"
+        [productById]="productById.bind(this)"
+        [isPlacingOrder]="isPlacingOrder"
+        (backToCart)="navigateTo('cart')"
         (placeOrder)="placeOrder($event)"
       ></app-checkout-page>
     </section>
@@ -164,13 +177,17 @@
 
     @if (page === 'confirmation') {
     <section class="panel center">
-      <app-confirmation-page [lastOrderId]="lastOrderId" (viewOrders)="navigateTo('orders')"></app-confirmation-page>
+      <app-confirmation-page
+        [lastOrderId]="lastOrderId"
+        (viewOrders)="navigateTo('orders')"
+        (continueShopping)="navigateTo('shop')"
+      ></app-confirmation-page>
     </section>
     }
 
     @if (page === 'orders') {
     <section class="panel">
-      <app-orders-page [orders]="orders"></app-orders-page>
+      <app-orders-page [orders]="orders" [productById]="productById.bind(this)"></app-orders-page>
     </section>
     }
 
@@ -188,7 +205,7 @@
   </main>
 
   <footer>
-    <p>Golden Harvest Honey</p>
+    <p>Magadha Honey</p>
     <small>Bringing nature's sweetness to your table since 2024</small>
   </footer>
 </div>

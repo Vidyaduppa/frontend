@@ -12,11 +12,21 @@ app-admin-dashboard {
   background: #f1f5f9;
 }
 
+.admin-shell app-admin-sidebar {
+  display: block;
+  height: 100%;
+  min-height: 100vh;
+}
+
 .admin-shell .sidebar {
   display: grid;
   grid-template-rows: auto 1fr auto;
   background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
   color: #fff;
+  height: 100%;
+  min-height: 100vh;
+  position: sticky;
+  top: 0;
 }
 
 .admin-shell .sidebar-head,
@@ -50,10 +60,12 @@ app-admin-dashboard {
 
 .admin-shell .sidebar-nav {
   padding: 1rem 0;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .admin-shell .sidebar-item {
-  width: 100%;
+  width: calc(100% - 1.8rem);
   border: 0;
   background: transparent;
   color: inherit;
@@ -63,23 +75,33 @@ app-admin-dashboard {
   align-items: center;
   padding: 0.75rem 1.5rem;
   cursor: pointer;
+  border-radius: 16px;
+  margin: 0.15rem 0.9rem;
 }
 
 .admin-shell .sidebar-item:hover {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.06);
 }
 
 .admin-shell .sidebar-item.active {
-  background: rgba(245, 158, 11, 0.12);
-  border-left: 3px solid #f59e0b;
+  background: linear-gradient(90deg, rgba(245, 158, 11, 0.28), rgba(245, 158, 11, 0.06));
+  box-shadow: inset 3px 0 0 #f59e0b;
 }
 
 .admin-shell .logout-btn {
-  border: 0;
-  background: transparent;
+  width: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.06);
   color: #fff;
   cursor: pointer;
-  padding: 0;
+  padding: 0.7rem 0.9rem;
+  border-radius: 14px;
+  text-align: left;
+  font-weight: 700;
+}
+
+.admin-shell .logout-btn:hover {
+  background: rgba(255, 255, 255, 0.09);
 }
 
 .admin-shell .admin-main {
@@ -125,26 +147,28 @@ app-admin-dashboard {
   color: #fff;
 }
 
+.admin-shell button {
+  transition:
+    transform 0.06s ease,
+    box-shadow 0.15s ease,
+    background 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.admin-shell button:active {
+  transform: translateY(1px);
+}
+
+.admin-shell button:focus-visible,
+.admin-shell input:focus-visible,
+.admin-shell select:focus-visible {
+  outline: 3px solid rgba(245, 158, 11, 0.35);
+  outline-offset: 2px;
+}
+
 .admin-shell .content {
   padding: 1.5rem;
-}
-
-.admin-shell .admin-credentials {
-  margin: 1.5rem 1.5rem 0;
-  padding: 1rem 1.25rem;
-  border-radius: 0.75rem;
-  border: 1px solid #fde68a;
-  background: #fffbeb;
-  color: #78350f;
-}
-
-.admin-shell .admin-credentials h3 {
-  margin: 0 0 0.5rem;
-  font-size: 1rem;
-}
-
-.admin-shell .admin-credentials p {
-  margin: 0.25rem 0;
 }
 
 .admin-shell .stats {
@@ -190,6 +214,7 @@ app-admin-dashboard {
   border-radius: 0.75rem;
   border-collapse: collapse;
   overflow: hidden;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
 }
 
 .admin-shell th,
@@ -197,6 +222,32 @@ app-admin-dashboard {
   padding: 0.9rem;
   text-align: left;
   border-bottom: 1px solid #e2e8f0;
+}
+
+.admin-shell tbody tr:hover {
+  background: #f8fafc;
+}
+
+.admin-shell .admin-thumb {
+  width: 44px;
+  height: 44px;
+  border-radius: 0.6rem;
+  object-fit: cover;
+  border: 1px solid #e2e8f0;
+  display: block;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.1);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.admin-shell tbody tr:hover .admin-thumb {
+  transform: scale(1.02);
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.12);
+}
+
+.admin-shell .admin-thumb.placeholder {
+  display: block;
+  background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
 }
 
 .admin-shell thead {
@@ -226,6 +277,11 @@ app-admin-dashboard {
   cursor: pointer;
 }
 
+.admin-shell button:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08);
+}
+
 .admin-shell .small-btn {
   font-size: 0.75rem;
   padding: 0.25rem 0.6rem;
@@ -237,10 +293,21 @@ app-admin-dashboard {
   color: #ef4444;
 }
 
+.admin-shell .small-btn.danger:hover {
+  background: rgba(239, 68, 68, 0.08);
+  border-color: #ef4444;
+}
+
 .admin-shell .primary-btn {
   background: #f59e0b;
   border-color: #f59e0b;
   color: #fff;
+}
+
+.admin-shell .primary-btn:hover {
+  background: #d97706;
+  border-color: #d97706;
+  box-shadow: 0 6px 18px rgba(245, 158, 11, 0.25);
 }
 
 .admin-shell .stack {
@@ -264,6 +331,9 @@ app-admin-dashboard {
   padding: 1.25rem;
   display: grid;
   gap: 1rem;
+  box-shadow:
+    0 18px 40px rgba(15, 23, 42, 0.2),
+    0 2px 10px rgba(15, 23, 42, 0.12);
 }
 
 .admin-shell input,
@@ -272,6 +342,61 @@ app-admin-dashboard {
   border: 1px solid #e2e8f0;
   border-radius: 0.5rem;
   padding: 0.6rem 0.75rem;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.admin-shell input:hover,
+.admin-shell select:hover {
+  border-color: #cbd5e1;
+}
+
+.admin-shell input:focus,
+.admin-shell select:focus {
+  border-color: rgba(245, 158, 11, 0.7);
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+}
+
+.admin-shell .image-mode {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.admin-shell .image-mode-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+  color: #334155;
+  padding: 0.35rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  user-select: none;
+}
+
+.admin-shell .image-mode-option:hover {
+  border-color: #cbd5e1;
+}
+
+.admin-shell .help-text {
+  color: #64748b;
+  font-size: 0.85rem;
+}
+
+.admin-shell .error-text {
+  color: #b91c1c;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.admin-shell .image-preview {
+  width: 100%;
+  max-height: 180px;
+  object-fit: cover;
+  border-radius: 0.75rem;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.12);
 }
 
 .admin-shell .modal-actions {
@@ -292,10 +417,16 @@ app-admin-dashboard {
 
 @media (max-width: 900px) {
   .admin-shell {
-    grid-template-columns: 1fr;
+    grid-template-columns: 280px 1fr;
   }
 
   .admin-shell .sidebar {
-    grid-template-rows: auto auto auto;
+    grid-template-rows: auto 1fr auto;
+  }
+}
+
+@media (max-width: 720px) {
+  .admin-shell {
+    grid-template-columns: 260px 1fr;
   }
 }

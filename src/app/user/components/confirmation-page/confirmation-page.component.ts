@@ -9,4 +9,5 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 export class ConfirmationPageComponent {
   @Input() lastOrderId = '';
   @Output() viewOrders = new EventEmitter<void>();
+  @Output() continueShopping = new EventEmitter<void>();
 }

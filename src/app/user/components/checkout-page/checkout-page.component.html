@@ -1,24 +1,101 @@
-<h2>Checkout</h2>
-<div class="form">
-  <input type="text" placeholder="Full Name" [(ngModel)]="form.name" />
-  <input type="email" placeholder="Email" [(ngModel)]="form.email" />
-  <textarea rows="2" placeholder="Address" [(ngModel)]="form.address"></textarea>
-  <select [(ngModel)]="form.paymentMethod">
-    <option value="card">Credit / Debit Card</option>
-    <option value="paypal">PayPal</option>
-    <option value="apple">Apple Pay</option>
-  </select>
-  @if (form.paymentMethod === 'card') {
-  <div class="form">
-    <input type="text" placeholder="Card Number" [(ngModel)]="form.cardNumber" (input)="formatCardNumber()" />
-    <input type="text" placeholder="MM/YY" [(ngModel)]="form.cardExpiry" (input)="formatExpiry()" />
-    <input type="text" placeholder="CVC" [(ngModel)]="form.cardCvc" />
+<div class="head">
+  <div>
+    <h2>Checkout</h2>
+    <p class="sub">Confirm shipping and choose a payment method.</p>
   </div>
-  }
+  <button type="button" class="ghost" (click)="backToCart.emit()">Back to cart</button>
 </div>
-<div class="summary">
-  <div><span>Subtotal</span><strong>${{ subtotal.toFixed(2) }}</strong></div>
-  <div><span>Tax</span><strong>${{ tax.toFixed(2) }}</strong></div>
-  <div><span>Total</span><strong>${{ total.toFixed(2) }}</strong></div>
+
+@if (error) {
+<div class="alert">{{ error }}</div>
+}
+
+<div class="grid">
+  <section class="card">
+    <h3>Shipping</h3>
+    <div class="form">
+      <input type="text" placeholder="Full Name" [(ngModel)]="form.name" autocomplete="name" />
+      <input type="email" placeholder="Email" [(ngModel)]="form.email" autocomplete="email" />
+      <textarea rows="3" placeholder="Address" [(ngModel)]="form.address" autocomplete="street-address"></textarea>
+    </div>
+  </section>
+
+  <section class="card">
+    <h3>Payment</h3>
+    <div class="pay">
+      <label class="pay-opt" [class.active]="form.paymentMethod === 'card'">
+        <input type="radio" name="payment" [(ngModel)]="form.paymentMethod" value="card" />
+        <span class="tag">Card</span>
+        <small>Visa / Mastercard</small>
+      </label>
+      <label class="pay-opt" [class.active]="form.paymentMethod === 'paypal'">
+        <input type="radio" name="payment" [(ngModel)]="form.paymentMethod" value="paypal" />
+        <span class="tag">PayPal</span>
+        <small>Fast checkout</small>
+      </label>
+      <label class="pay-opt" [class.active]="form.paymentMethod === 'apple'">
+        <input type="radio" name="payment" [(ngModel)]="form.paymentMethod" value="apple" />
+        <span class="tag">Apple Pay</span>
+        <small>One‑tap pay</small>
+      </label>
+    </div>
+
+    @if (form.paymentMethod === 'card') {
+    <div class="form card-form">
+      <input
+        type="text"
+        placeholder="Card Number"
+        [(ngModel)]="form.cardNumber"
+        (input)="formatCardNumber()"
+        inputmode="numeric"
+        autocomplete="cc-number"
+      />
+      <div class="two">
+        <input
+          type="text"
+          placeholder="MM/YY"
+          [(ngModel)]="form.cardExpiry"
+          (input)="formatExpiry()"
+          inputmode="numeric"
+          autocomplete="cc-exp"
+        />
+        <input type="text" placeholder="CVC" [(ngModel)]="form.cardCvc" inputmode="numeric" autocomplete="cc-csc" />
+      </div>
+      <small class="hint">Your payment details are used only to place this order.</small>
+    </div>
+    }
+
+    @if (form.paymentMethod !== 'card') {
+    <p class="hint">You’ll be redirected to complete payment after placing the order.</p>
+    }
+  </section>
 </div>
-<button type="button" class="cta" (click)="placeOrder.emit(form)">Place Order</button>
+
+<section class="card review">
+  <div class="review-head">
+    <h3>Order Review</h3>
+    <small class="sub">{{ cart.length }} item(s)</small>
+  </div>
+
+  <div class="items">
+    @for (item of cart; track item.productId) {
+    <div class="item">
+      <div class="name">
+        <strong>{{ productById(item.productId)?.name ?? item.productId }}</strong>
+        <small class="sub">Qty: {{ item.quantity }}</small>
+      </div>
+      <strong>₹{{ ((productById(item.productId)?.price ?? 0) * item.quantity).toFixed(2) }}</strong>
+    </div>
+    }
+  </div>
+
+  <div class="summary">
+    <div><span>Subtotal</span><strong>₹{{ subtotal.toFixed(2) }}</strong></div>
+    <div><span>Tax</span><strong>₹{{ tax.toFixed(2) }}</strong></div>
+    <div class="total"><span>Total</span><strong>₹{{ total.toFixed(2) }}</strong></div>
+  </div>
+
+  <button type="button" class="cta" [disabled]="isPlacingOrder" (click)="submit()">
+    @if (isPlacingOrder) { Placing order... } @else { Place Order }
+  </button>
+</section>

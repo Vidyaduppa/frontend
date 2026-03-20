@@ -20,7 +20,7 @@
     <tr>
       <td>{{ order.id }}</td>
       <td>{{ order.items.length }} items</td>
-      <td>${{ order.total.toFixed(2) }}</td>
+      <td>₹{{ order.total.toFixed(2) }}</td>
       <td><span class="badge">{{ order.status }}</span></td>
       <td>{{ order.date | date: 'MMM d, y' }}</td>
       <td><button type="button" class="small-btn" (click)="viewOrder.emit(order.id)">View</button></td>

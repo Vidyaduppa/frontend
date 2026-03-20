@@ -42,6 +42,7 @@ export class AdminDashboardComponent implements OnInit {
   selectedOrderStatus = 'Delivered';
   selectedOrderId = '';
   toastMessage = '';
+  editingProduct: AdminProduct | null = null;
 
   readonly tabs: AdminTabItem[] = [
     { key: 'dashboard', label: 'Dashboard', icon: 'Dashboard' },
@@ -80,6 +81,12 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   openProductModal(): void {
+    this.editingProduct = null;
+    this.showProductModal = true;
+  }
+
+  openEditProductModal(product: AdminProduct): void {
+    this.editingProduct = product;
     this.showProductModal = true;
   }
 
@@ -90,6 +97,7 @@ export class AdminDashboardComponent implements OnInit {
 
   closeProductModal(): void {
     this.showProductModal = false;
+    this.editingProduct = null;
   }
 
   closeOrderModal(): void {
@@ -98,24 +106,34 @@ export class AdminDashboardComponent implements OnInit {
 
   handleProductSubmit(newProduct: NewAdminProduct): void {
     const mappedCategory = this.mapCategory(newProduct.category);
-    this.apiService
-      .createProduct({
-        name: newProduct.name,
-        category: mappedCategory,
-        description: 'Created from admin panel',
-        price: newProduct.price,
-        featured: false,
-        imageUrl: newProduct.imageUrl
-      })
+    const request$ = newProduct.id
+      ? this.apiService.updateProduct(newProduct.id, {
+          name: newProduct.name,
+          category: mappedCategory,
+          price: newProduct.price,
+          imageUrl: newProduct.imageUrl,
+          stock: newProduct.stock
+        })
+      : this.apiService.createProduct({
+          name: newProduct.name,
+          category: mappedCategory,
+          description: newProduct.name,
+          price: newProduct.price,
+          featured: false,
+          imageUrl: newProduct.imageUrl,
+          stock: newProduct.stock
+        });
+
+    request$
       .pipe(catchError(() => of(null)))
-      .subscribe((createdProduct) => {
-        if (!createdProduct) {
-          this.showToast('Failed to add product');
+      .subscribe((result) => {
+        if (!result) {
+          this.showToast(newProduct.id ? 'Failed to update product' : 'Failed to add product');
           return;
         }
         this.loadProducts();
         this.closeProductModal();
-        this.showToast('Product added successfully!');
+        this.showToast(newProduct.id ? 'Product updated successfully!' : 'Product added successfully!');
       });
   }
 
@@ -187,8 +205,11 @@ export class AdminDashboardComponent implements OnInit {
           id: product.id,
           name: product.name,
           category: product.category,
-          price: `$${product.price.toFixed(2)}`,
-          stock: Math.floor(20 + product.price * 4)
+          categoryValue: product.category,
+          price: `₹${product.price.toFixed(2)}`,
+          priceValue: product.price,
+          stock: product.stock ?? 0,
+          imageUrl: product.imageUrl
         }));
       });
   }
@@ -205,6 +226,15 @@ export class AdminDashboardComponent implements OnInit {
       .getUsers()
       .pipe(catchError(() => of([])))
       .subscribe((users) => (this.users = users));
+  }
+
+  get activeNonAdminUsers(): number {
+    return this.users.filter((user) => {
+      if (user.status !== 'active') return false;
+      if (user.role === 'admin') return false;
+      if (user.email?.toLowerCase() === this.adminCredentials.email.toLowerCase()) return false;
+      return true;
+    }).length;
   }
 
   private loadFeedback(): void {
@@ -225,5 +255,9 @@ export class AdminDashboardComponent implements OnInit {
     if (category === 'Medicinal') return 'specialty';
     if (category === 'Raw/Organic') return 'organic';
     return 'raw';
+  }
+
+  get productModalMode(): 'add' | 'edit' {
+    return this.editingProduct ? 'edit' : 'add';
   }
 }

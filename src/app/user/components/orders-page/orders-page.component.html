@@ -3,12 +3,35 @@
 <p class="empty">No orders yet.</p>
 }
 @for (order of orders; track order.id) {
-<article class="line-item">
-  <div>
-    <strong>{{ order.id }}</strong>
-    <small>{{ order.date | date: 'MMM d, y' }}</small>
+<article class="order">
+  <button type="button" class="order-head" (click)="toggle(order.id)" [attr.aria-expanded]="isExpanded(order.id)">
+    <div class="left">
+      <strong class="oid">{{ order.id }}</strong>
+      <small class="muted">{{ order.date | date: 'MMM d, y' }}</small>
+    </div>
+    <div class="right">
+      <span class="status">{{ order.status }}</span>
+      <strong class="total">₹{{ order.total.toFixed(2) }}</strong>
+      <span class="chev" aria-hidden="true">{{ isExpanded(order.id) ? '▾' : '▸' }}</span>
+    </div>
+  </button>
+
+  @if (isExpanded(order.id)) {
+  <div class="order-body">
+    <div class="items">
+      @for (item of order.items; track item.productId) {
+      <div class="item">
+        <div class="name">
+          <strong>{{ productById(item.productId)?.name ?? item.productId }}</strong>
+          <small class="muted">Qty: {{ item.quantity }}</small>
+        </div>
+        <span class="price">
+          ₹{{ (productById(item.productId)?.price ?? 0).toFixed(2) }}
+        </span>
+      </div>
+      }
+    </div>
   </div>
-  <span>{{ order.status }}</span>
-  <strong>${{ order.total.toFixed(2) }}</strong>
+  }
 </article>
 }

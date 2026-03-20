@@ -9,21 +9,16 @@
   <div class="admin-main">
     <app-admin-header [title]="pageTitle"></app-admin-header>
 
-    <section class="admin-credentials">
-      <h3>Admin Login Credentials</h3>
-      <p><strong>Email:</strong> {{ adminCredentials.email }}</p>
-      <p><strong>Password:</strong> {{ adminCredentials.password }}</p>
-    </section>
-
     <section class="content">
       @if (activeTab === 'dashboard') {
-      <app-admin-dashboard-tab [analytics]="analytics"></app-admin-dashboard-tab>
+      <app-admin-dashboard-tab [analytics]="analytics" [activeUsers]="activeNonAdminUsers"></app-admin-dashboard-tab>
       }
 
       @if (activeTab === 'products') {
       <app-admin-products-tab
         [products]="products"
         (addProduct)="openProductModal()"
+        (editProduct)="openEditProductModal($event)"
         (deleteProduct)="deleteProduct($event)"
       ></app-admin-products-tab>
       }
@@ -41,13 +36,15 @@
       }
 
       @if (activeTab === 'analytics') {
-      <app-admin-analytics-tab [analytics]="analytics"></app-admin-analytics-tab>
+      <app-admin-analytics-tab [analytics]="analytics" [activeUsers]="activeNonAdminUsers"></app-admin-analytics-tab>
       }
     </section>
   </div>
 
   <app-admin-product-modal
     [visible]="showProductModal"
+    [mode]="productModalMode"
+    [initialProduct]="editingProduct"
     (close)="closeProductModal()"
     (submitProduct)="handleProductSubmit($event)"
   ></app-admin-product-modal>

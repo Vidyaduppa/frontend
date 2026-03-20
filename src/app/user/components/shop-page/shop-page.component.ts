@@ -20,7 +20,17 @@ export class ShopPageComponent {
   @Output() queryChange = new EventEmitter<ProductQuery>();
   @Output() addToCart = new EventEmitter<string>();
 
+  private readonly brokenImageIds = new Set<string>();
+
   update<K extends keyof ProductQuery>(key: K, value: ProductQuery[K]): void {
     this.queryChange.emit({ ...this.query, [key]: value });
+  }
+
+  shouldShowImage(product: Product): boolean {
+    return Boolean(product.imageUrl) && !this.brokenImageIds.has(product.id);
+  }
+
+  onProductImageError(productId: string): void {
+    this.brokenImageIds.add(productId);
   }
 }

@@ -9,4 +9,5 @@ import { AdminAnalyticsResponse } from '../../../services/api.service';
 })
 export class AnalyticsTabComponent {
   @Input() analytics: AdminAnalyticsResponse | null = null;
+  @Input() activeUsers = 0;
 }

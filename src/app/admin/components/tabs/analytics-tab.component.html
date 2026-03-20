@@ -5,14 +5,15 @@
   </article>
   <article class="card">
     <h4>Total Revenue</h4>
-    <p>${{ analytics?.totalRevenue ?? 0 }}</p>
+    <p>&#8377;{{ analytics?.totalRevenue ?? 0 }}</p>
   </article>
   <article class="card">
     <h4>Active Users</h4>
-    <p>{{ analytics?.activeUsers ?? 0 }}</p>
+    <p>{{ activeUsers }}</p>
   </article>
   <article class="card">
     <h4>Average Rating</h4>
     <p>{{ analytics?.averageRating ?? 0 }}</p>
   </article>
 </div>
+

@@ -19,9 +19,9 @@
   </select>
   <select [ngModel]="query.price" (ngModelChange)="update('price', $event)">
     <option value="all">Any Price</option>
-    <option value="under15">Under $15</option>
-    <option value="15to25">$15 - $25</option>
-    <option value="over25">Over $25</option>
+    <option value="under15">Under ₹150</option>
+    <option value="15to25">₹150 - ₹250</option>
+    <option value="over25">Over ₹250</option>
   </select>
   <select [ngModel]="query.sortBy" (ngModelChange)="update('sortBy', $event)">
     <option value="featured">Featured</option>
@@ -37,8 +37,14 @@
   @for (product of products; track product.id) {
   <article class="card">
     <div class="image">
-      @if (product.imageUrl) {
-      <img class="product-image" [src]="product.imageUrl" [alt]="product.name" loading="lazy" />
+      @if (shouldShowImage(product)) {
+      <img
+        class="product-image"
+        [src]="product.imageUrl"
+        [alt]="product.name"
+        loading="lazy"
+        (error)="onProductImageError(product.id)"
+      />
       } @else {
       {{ product.category[0] | uppercase }}
       }
@@ -54,7 +60,7 @@
         <small>{{ product.rating }}</small>
       </div>
       <div class="row">
-        <strong>${{ product.price.toFixed(2) }}</strong>
+        <strong>₹{{ product.price.toFixed(2) }}</strong>
         <button type="button" (click)="addToCart.emit(product.id)">Add</button>
       </div>
     </div>

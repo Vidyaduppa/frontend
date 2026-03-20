@@ -1,0 +1,360 @@
+<div class="lp">
+  <header class="nav">
+    <a class="brand" href="#top" aria-label="Magadha Honey">
+      <span class="mark" aria-hidden="true"></span>
+      <span class="word">
+        <strong>Magadha Honey</strong>
+        <small>Pure • Organic • Warm</small>
+      </span>
+    </a>
+
+    <nav class="links" aria-label="Primary">
+      <a href="#about">About</a>
+      <a href="#why">Why Us</a>
+      <a href="#products">Products</a>
+      <a href="#benefits">Benefits</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#contact">Contact</a>
+    </nav>
+
+    <div class="actions">
+      <button
+        type="button"
+        class="btn ghost menu"
+        (click)="toggleMobileMenu()"
+        [attr.aria-expanded]="mobileMenuOpen"
+        aria-controls="mobile-menu"
+        aria-label="Open menu"
+      >
+        <span aria-hidden="true">☰</span>
+      </button>
+      <button type="button" class="btn ghost" (click)="loginCta.emit()">Login</button>
+      <button type="button" class="btn primary" (click)="registerCta.emit()">Get Started</button>
+    </div>
+  </header>
+
+  @if (mobileMenuOpen) {
+  <div class="menu-overlay" (click)="closeMobileMenu()">
+    <div id="mobile-menu" class="menu-panel" (click)="$event.stopPropagation()">
+      <div class="menu-head">
+        <strong>Magadha Honey</strong>
+        <button type="button" class="btn ghost" (click)="closeMobileMenu()" aria-label="Close menu">✕</button>
+      </div>
+      <div class="menu-links">
+        <a href="#about" (click)="closeMobileMenu()">About</a>
+        <a href="#why" (click)="closeMobileMenu()">Why Us</a>
+        <a href="#products" (click)="closeMobileMenu()">Products</a>
+        <a href="#benefits" (click)="closeMobileMenu()">Benefits</a>
+        <a href="#reviews" (click)="closeMobileMenu()">Reviews</a>
+        <a href="#contact" (click)="closeMobileMenu()">Contact</a>
+      </div>
+      <div class="menu-actions">
+        <button
+          type="button"
+          class="btn ghost"
+          (click)="closeMobileMenu(); loginCta.emit()"
+        >
+          Login
+        </button>
+        <button
+          type="button"
+          class="btn primary"
+          (click)="closeMobileMenu(); registerCta.emit()"
+        >
+          Get Started
+        </button>
+      </div>
+    </div>
+  </div>
+  }
+
+  <main id="top">
+    <section class="hero">
+      <div class="hero-bg" aria-hidden="true"></div>
+      <div class="wrap">
+        <div class="hero-copy">
+          <span class="pill">Natural • Raw • Organic</span>
+          <h1>
+            Premium honey crafted by nature,
+            <span class="accent">bottled with care.</span>
+          </h1>
+          <p>
+            Discover small-batch honey sourced responsibly, with warm golden notes and a clean finish—made for everyday
+            rituals and gifting.
+          </p>
+          <div class="cta">
+            <button type="button" class="btn primary" (click)="registerCta.emit()">Shop Products</button>
+            <a class="btn ghost" href="#products">Explore Range</a>
+          </div>
+          <div class="trust">
+            <div class="trust-item">
+              <strong>100%</strong>
+              <span>Pure</span>
+            </div>
+            <div class="trust-item">
+              <strong>Small‑Batch</strong>
+              <span>Fresh</span>
+            </div>
+            <div class="trust-item">
+              <strong>Lab‑Tested</strong>
+              <span>Safe</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-card">
+          <div class="glass">
+            <div class="jar" aria-hidden="true">
+              <div class="drip"></div>
+            </div>
+            <div class="jar-copy">
+              <h3>Signature Wild Forest</h3>
+              <p>Deep floral aroma. Smooth texture. True golden color.</p>
+              <div class="row">
+                <span class="price">₹499</span>
+                <a class="mini" href="#auth">Buy now</a>
+              </div>
+            </div>
+          </div>
+          <div class="sparkle" aria-hidden="true"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="section about">
+      <div class="wrap two">
+        <div>
+          <h2>About Magadha Honey</h2>
+          <p class="lead">
+            Magadha Honey celebrates nature’s simplest luxury—pure honey with a warm, comforting profile inspired by
+            forests, fields, and flowering seasons.
+          </p>
+          <p>
+            We focus on gentle sourcing, clean processing, and premium packaging so every spoonful feels fresh, fragrant,
+            and authentic.
+          </p>
+        </div>
+
+        <div class="about-cards">
+          <div class="soft-card">
+            <div class="icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  d="M12 2c3 2 6 4.5 6 8.2 0 4.6-3.4 7.8-6 11.8-2.6-4-6-7.2-6-11.8C6 6.5 9 4 12 2Z"
+                  fill="currentColor"
+                />
+              </svg>
+            </div>
+            <h3>Warm & Pure</h3>
+            <p>Golden taste notes with a clean, natural finish.</p>
+          </div>
+          <div class="soft-card">
+            <div class="icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  d="M20 11c-5.5 0-9-2.5-12-6-2 7 2 13 10 15 1.5.4 2.8.2 4-1v-2c-1 .8-1.9 1-2 1-2 0-4.5-2-4.5-4.5S18 11 20 11Z"
+                  fill="currentColor"
+                />
+              </svg>
+            </div>
+            <h3>Nature First</h3>
+            <p>Inspired by organic, sustainable practices.</p>
+          </div>
+          <div class="soft-card">
+            <div class="icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  d="M12 2a7 7 0 0 0-7 7v4a7 7 0 0 0 14 0V9a7 7 0 0 0-7-7Zm0 2a5 5 0 0 1 5 5v4a5 5 0 0 1-10 0V9a5 5 0 0 1 5-5Z"
+                  fill="currentColor"
+                />
+              </svg>
+            </div>
+            <h3>Premium Pack</h3>
+            <p>Gift-ready jars designed for freshness.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="why" class="section why">
+      <div class="wrap">
+        <h2>Why Choose Us</h2>
+        <p class="sub">Four simple promises that make Magadha Honey feel premium, every time.</p>
+
+        <div class="grid four">
+          <div class="feature">
+            <div class="ficon">✓</div>
+            <h3>100% Pure</h3>
+            <p>No additives. No shortcuts. Just honey as nature intended.</p>
+          </div>
+          <div class="feature">
+            <div class="ficon">⚡</div>
+            <h3>Small‑Batch Fresh</h3>
+            <p>Handled gently to preserve aroma, texture, and color.</p>
+          </div>
+          <div class="feature">
+            <div class="ficon">🌿</div>
+            <h3>Organic Inspired</h3>
+            <p>Rooted in nature-friendly practices from source to jar.</p>
+          </div>
+          <div class="feature">
+            <div class="ficon">🛡️</div>
+            <h3>Quality Checks</h3>
+            <p>Consistency and safety with careful sourcing standards.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="products" class="section products">
+      <div class="wrap">
+        <div class="head-row">
+          <div>
+            <h2>Our Products</h2>
+            <p class="sub">A curated range designed for daily use and premium gifting.</p>
+          </div>
+          <a class="btn ghost" href="#auth">Order Now</a>
+        </div>
+
+        <div class="grid products-grid">
+          @for (p of products; track $index) {
+          <article class="p-card">
+            <div class="p-media" aria-hidden="true">
+              <div class="p-drip"></div>
+              <span class="p-badge">{{ p.badge }}</span>
+            </div>
+            <div class="p-body">
+              <h3>{{ p.name }}</h3>
+              <p>{{ p.description }}</p>
+              <div class="p-row">
+                <strong class="p-price">{{ p.price }}</strong>
+                <a class="mini" href="#auth">Add</a>
+              </div>
+            </div>
+          </article>
+          }
+        </div>
+      </div>
+    </section>
+
+    <section id="benefits" class="section benefits">
+      <div class="wrap two">
+        <div class="benefit-hero">
+          <h2>Health Benefits of Honey</h2>
+          <p class="lead">
+            A golden pantry essential—traditionally used for comfort, balance, and everyday wellness rituals.
+          </p>
+          <div class="note">
+            <span>Note:</span> Benefits vary by person. This is not medical advice.
+          </div>
+        </div>
+
+        <div class="benefit-list">
+          @for (b of benefits; track trackByIndex) {
+          <div class="benefit">
+            <h3>{{ b.title }}</h3>
+            <p>{{ b.description }}</p>
+          </div>
+          }
+        </div>
+      </div>
+    </section>
+
+    <section id="reviews" class="section reviews">
+      <div class="wrap">
+        <h2>Customer Testimonials</h2>
+        <p class="sub">Loved for its purity, aroma, and premium experience.</p>
+
+        <div class="grid three">
+          @for (t of testimonials; track $index) {
+          <figure class="t-card">
+            <div class="stars" aria-label="Rating">
+              @for (s of [].constructor(t.rating); track $index) {
+              <span aria-hidden="true">★</span>
+              }
+              @for (s of [].constructor(5 - t.rating); track $index) {
+              <span class="dim" aria-hidden="true">★</span>
+              }
+            </div>
+            <blockquote>“{{ t.quote }}”</blockquote>
+            <figcaption>
+              <strong>{{ t.name }}</strong>
+              <span>{{ t.location }}</span>
+            </figcaption>
+          </figure>
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="section cta-band">
+      <div class="wrap band">
+        <div>
+          <h2>Ready to taste the golden difference?</h2>
+          <p class="sub">Join Magadha Honey today and enjoy premium honey made for everyday rituals.</p>
+        </div>
+        <div class="cta">
+          <button type="button" class="btn primary" (click)="registerCta.emit()">Create Account</button>
+          <a class="btn ghost" href="#products">Browse Products</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="auth" class="section auth-slot">
+      <div class="wrap">
+        <ng-content select="[landing-auth]"></ng-content>
+      </div>
+    </section>
+  </main>
+
+  @if (showBackToTop) {
+  <button type="button" class="to-top" (click)="scrollToTop()" aria-label="Back to top">↑</button>
+  }
+
+  <footer id="contact" class="footer">
+    <div class="wrap foot">
+      <div>
+        <h3>Magadha Honey</h3>
+        <p>Premium organic honey with warm, natural notes.</p>
+        <p class="muted">© {{ year }} Magadha Honey. All rights reserved.</p>
+      </div>
+
+      <div class="contact">
+        <h4>Contact</h4>
+        <a href="mailto:hello@magadhahoney.com">hello&#64;magadhahoney.com</a>
+        <a href="tel:+910000000000">+91 00000 00000</a>
+        <span class="muted">Magadha, India</span>
+      </div>
+
+      <div class="social">
+        <h4>Social</h4>
+        <div class="icons" aria-label="Social media">
+          <a class="s" href="#" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Zm10 2H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3Zm-5 4a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm6-2a1 1 0 1 1 0 2 1 1 0 0 1 0-2Z"
+                fill="currentColor"
+              />
+            </svg>
+          </a>
+          <a class="s" href="#" aria-label="Facebook">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M14 9h3V6h-3c-2.2 0-4 1.8-4 4v3H7v3h3v6h3v-6h3l1-3h-4v-3c0-.6.4-1 1-1Z"
+                fill="currentColor"
+              />
+            </svg>
+          </a>
+          <a class="s" href="#" aria-label="Twitter / X">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M18.9 2H22l-6.8 7.8L23 22h-6.7l-5.3-6.9L4.9 22H2l7.4-8.5L1 2h6.8l4.8 6.3L18.9 2Zm-1.2 18h1.7L7.4 3.9H5.6L17.7 20Z"
+                fill="currentColor"
+              />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>

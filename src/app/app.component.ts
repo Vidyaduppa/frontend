@@ -14,6 +14,7 @@ import { AuthService } from './services/auth.service';
 import { StoreService } from './services/store.service';
 import { CartItem, FeedbackItem, Order, Page, Product, ProductQuery } from './services/store.models';
 import { catchError, of } from 'rxjs';
+import { LandingPageComponent } from './marketing/components/landing-page/landing-page.component';
 
 type AuthRole = 'guest' | 'user' | 'admin';
 type AuthMode = 'login' | 'register' | 'admin-otp';
@@ -31,13 +32,14 @@ type AdminOtpStep = 'request' | 'verify';
     ConfirmationPageComponent,
     OrdersPageComponent,
     ProfilePageComponent,
-    FeedbackPageComponent
+    FeedbackPageComponent,
+    LandingPageComponent
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  title = 'frontend';
+  title = 'Magadha Honey';
   authMode: AuthMode = 'login';
   authRole: AuthRole = 'guest';
 
@@ -65,6 +67,7 @@ export class AppComponent {
 
   toast = '';
   toastType: 'success' | 'error' = 'success';
+  isPlacingOrder = false;
 
   profile = { name: '', email: '', address: '' };
   lastOrderId = '';
@@ -117,6 +120,13 @@ export class AppComponent {
 
   get isAuthenticated(): boolean {
     return this.authRole !== 'guest';
+  }
+
+  openAuth(mode: 'login' | 'register'): void {
+    this.switchAuthMode(mode);
+    setTimeout(() => {
+      document.getElementById('auth')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 0);
   }
 
   switchAuthMode(mode: AuthMode): void {
@@ -316,6 +326,7 @@ export class AppComponent {
   }
 
   placeOrder(details: CheckoutFormValue): void {
+    if (this.isPlacingOrder) return;
     if (!details.name || !details.email || !details.address) {
       this.showToast('Please fill shipping details', 'error');
       return;
@@ -331,6 +342,7 @@ export class AppComponent {
       }
     }
 
+    this.isPlacingOrder = true;
     this.apiService
       .createOrder({
         items: this.cart.map((item) => ({ ...item })),
@@ -343,12 +355,13 @@ export class AppComponent {
       })
       .pipe(catchError(() => of(null)))
       .subscribe((createdOrder) => {
+        this.isPlacingOrder = false;
         if (!createdOrder) {
           this.showToast('Could not place order. Try again.', 'error');
           return;
         }
         this.storeService.loadOrders();
-        this.lastOrderId = `${createdOrder.id} | Total: $${createdOrder.total.toFixed(2)}`;
+        this.lastOrderId = `${createdOrder.id} | Total: ₹${createdOrder.total.toFixed(2)}`;
         this.storeService.clearCart();
         this.navigateTo('confirmation');
       });
